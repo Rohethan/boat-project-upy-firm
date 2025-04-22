@@ -1,0 +1,22 @@
+from tinylog import TinyLog
+
+#----------------------------------------------
+# CONFIG FILE : THE CONTAINER OF ALL PARAMETERS
+# PLEASE UPDATE THESE VALUES TO YOUR NEEDS.
+# NO IMPORTANT PARAMETER SHALL BE HARDCODED.
+# ALL SHALL BE IN THIS CONFIG FILE.
+#----------------------------------------------
+
+# --- PIN DEFINITIONS ---
+LED_PIN = 2
+
+# --- LOG PARAMETERS ---
+LOG_LEVEL = TinyLog.DEBUG
+
+# --- WIFI PARAMETERS ---
+WIFI_SSID = "Team4-BP"
+WIFI_PASSWORD = "sodastream-mitosis"
+WIFI_MAX_CLIENTS = 10
+
+# --- SERVER PARAMETERS ---
+SERVER_PORT = 80

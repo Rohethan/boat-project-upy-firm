@@ -3,8 +3,9 @@ import network
 import micropyserver
 import _thread
 from tinylog import TinyLog
+import config as CONFIG
 
-log = TinyLog(TinyLog.DEBUG)
+log = TinyLog(CONFIG.LOG_LEVEL)
 log.debug("Hello world ! Starting up !")
 
 
@@ -14,13 +15,13 @@ supersecret = "sodastream-mitosis"
 
 log.info("Starting Wifi AP")
 ap = network.WLAN(network.WLAN.IF_AP)
-ap.config(ssid='Team4-BP', authmode=network.AUTH_WPA_WPA2_PSK, password=b'sodastream-mitosis')
-ap.config(max_clients=10)
+ap.config(ssid=CONFIG.WIFI_SSID, authmode=network.AUTH_WPA_WPA2_PSK, password=CONFIG.WIFI_PASSWORD.encode())
+ap.config(max_clients=CONFIG.WIFI_MAX_CLIENTS)
 ap.active(True)
 
 
 log.info("Starting http server")
-server = micropyserver.MicroPyServer(host='0.0.0.0', port=80)
+server = micropyserver.MicroPyServer(host='0.0.0.0', port=CONFIG.SERVER_PORT)
 def wp_root(request):
     server.send("Hello world !")
 
