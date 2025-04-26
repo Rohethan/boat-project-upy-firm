@@ -9,6 +9,11 @@ from tinylog import TinyLog
 
 # --- PIN DEFINITIONS ---
 LED_PIN = 2
+NEO6M_RX_PIN = 5
+NEO6M_TX_PIN = 4
+
+# --- GPS PARAMETERS ---
+UART_ID_GPS = 1
 
 # --- LOG PARAMETERS ---
 LOG_LEVEL = TinyLog.DEBUG
