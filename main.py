@@ -2,15 +2,12 @@ import utime
 import network
 
 import config
-import gps_api
-import micropyserver
+from component_api import gps_api, motor_api
 import _thread
 
-import motor_api
-from tinylog import TinyLog
+from libraries.tinylog import TinyLog
 import config as CONFIG
-import mps_utils
-
+from libraries import mps_utils, micropyserver
 
 log = TinyLog(CONFIG.LOG_LEVEL)
 log.debug("Hello world ! Starting up !")

@@ -1,4 +1,4 @@
-from tinylog import TinyLog
+from libraries.tinylog import TinyLog
 
 #----------------------------------------------
 # CONFIG FILE : THE CONTAINER OF ALL PARAMETERS

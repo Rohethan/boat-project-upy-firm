@@ -2,7 +2,7 @@ from warnings import deprecated
 
 import machine
 import utime
-import tinylog
+
 global log
 import ujson
 
