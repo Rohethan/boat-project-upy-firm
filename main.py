@@ -20,7 +20,7 @@ log.debug("Hello world ! Starting up !")
 # ------ GLOBAL OBJECTS INIT ZONE -------
 log.info("Initializing global objects")
 super_top_secret_thing = ...
-gps = gps_api.GPS(tx_pin=CONFIG.NEO6M_TX_PIN, rx_pin=CONFIG.NEO6M_RX_PIN)
+gps = gps_api.GPS(tx_pin=CONFIG.NEO6M_TX_PIN, rx_pin=CONFIG.NEO6M_RX_PIN, uart_id=CONFIG.UART_ID_GPS)
 propulsion_system = motor_api.PropulsionSystem(config.IN1_PIN, config.IN2_PIN, config.ENA_PIN, config.IN3_PIN,
                                                config.IN4_PIN, config.ENB_PIN, config.HALL_LEFT_PIN,
                                                config.HALL_RIGHT_PIN)
