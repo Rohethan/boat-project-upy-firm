@@ -9,6 +9,7 @@ import _thread
 import motor_api
 from tinylog import TinyLog
 import config as CONFIG
+import mps_utils
 
 
 log = TinyLog(CONFIG.LOG_LEVEL)
@@ -46,8 +47,26 @@ def wp_root(request):
 def wp_gps(request):
     server.send(gps.get_gps_data_json())
 
+def wp_set_motors(request):
+    params = mps_utils.get_request_query_params(request)
+    try :
+        power = float(params['power'])
+    except KeyError :
+        power = 0.0
+
+    try :
+        turn_ratio = float(params['turn_ratio'])
+    except KeyError :
+        turn_ratio = 0.5
+
+    propulsion_system.update_thrust_ratios(turn_ratio, power)
+    server.send("ACK")
+
+
 server.add_route("/", wp_root)
 server.add_route("/api/gps", wp_gps)
+server.add_route("/api/set_motors", wp_set_motors)
+
 
 
 _thread.start_new_thread(server.start, ())
