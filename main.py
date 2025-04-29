@@ -1,11 +1,15 @@
 import utime
 import network
 
+import config
 import gps_api
 import micropyserver
 import _thread
+
+import motor_api
 from tinylog import TinyLog
 import config as CONFIG
+
 
 log = TinyLog(CONFIG.LOG_LEVEL)
 log.debug("Hello world ! Starting up !")
@@ -16,6 +20,10 @@ log.debug("Hello world ! Starting up !")
 log.info("Initializing global objects")
 super_top_secret_thing = ...
 gps = gps_api.GPS(tx_pin=CONFIG.NEO6M_TX_PIN, rx_pin=CONFIG.NEO6M_RX_PIN)
+propulsion_system = motor_api.PropulsionSystem(config.IN1_PIN, config.IN2_PIN, config.ENA_PIN, config.IN3_PIN,
+                                               config.IN4_PIN, config.ENB_PIN, config.HALL_LEFT_PIN,
+                                               config.HALL_RIGHT_PIN)
+
 
 
 # ------ WIFI AP SETUP ZONE
@@ -39,8 +47,11 @@ def wp_gps(request):
     server.send(gps.get_gps_data_json())
 
 server.add_route("/", wp_root)
-server.add_route("/gps", wp_gps)
+server.add_route("/api/gps", wp_gps)
+
+
 _thread.start_new_thread(server.start, ())
+_thread.start_new_thread(propulsion_system.motor_task, ())
 
 
 log.info("Starting main loop")
