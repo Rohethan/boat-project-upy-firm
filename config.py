@@ -23,13 +23,17 @@ HALL_LEFT_PIN = 36
 HALL_RIGHT_PIN = 18
 
 # --- MOTOR AND TRANSMISSION PARAMETERS ---
-MOTOR_MAX_RPM = 2000 # Set this to the lowest of the two motors
+MOTOR_MAX_RPM = 2500 # Set this to the lowest of the two motors
 PID_P = 1
 PID_I = 0.25
 PID_D = 0.5
 
 # --- GPS PARAMETERS ---
 UART_ID_GPS = 1
+
+# --- ENERGY PARAMETERS ---
+BATTERY_MAX_VOLTAGE = 12.6
+ADC_VOLT_PER_AMP = 0.1
 
 # --- LOG PARAMETERS ---
 LOG_LEVEL = TinyLog.DEBUG
