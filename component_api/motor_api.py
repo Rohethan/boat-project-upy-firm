@@ -1,4 +1,5 @@
-from machine import Pin, Counter, PWM
+from machine import Pin, PWM
+from libraries.counter import Counter
 import utime
 import math
 import micropython
@@ -77,8 +78,8 @@ class PropulsionSystem:
         self.hsL = Pin(hsL, Pin.IN)
         self.hsR = Pin(hsR, Pin.IN)
 
-        self.left_rotation_counter = Counter(0, pin=hsL)
-        self.right_rotation_counter = Counter(1, pin=hsR)
+        self.left_rotation_counter = Counter(hsL)
+        self.right_rotation_counter = Counter(hsR)
         rn_time = utime.ticks_ms()
         self.lrc_time = rn_time
         self.rrc_time = rn_time
@@ -100,11 +101,11 @@ class PropulsionSystem:
 
     def calculate_rpms(self):
         # time sensitive stuff kinda here?
-        l_ctr_val = self.left_rotation_counter.value()
-        r_ctr_val = self.right_rotation_counter.value()
+        l_ctr_val = self.left_rotation_counter.count
+        r_ctr_val = self.right_rotation_counter.count
         rn_time = utime.ticks_ms()
-        self.left_rotation_counter.value(0)
-        self.right_rotation_counter.value(0)
+        self.left_rotation_counter.count = 0
+        self.right_rotation_counter.count = 0
 
         # time delta and adjustments
         l_delta_t = (rn_time - self.lrc_time) /1000 # direct to second conversion here, a bit faster ops.

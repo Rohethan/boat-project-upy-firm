@@ -1,4 +1,4 @@
-from warnings import deprecated
+
 
 import machine
 import utime
@@ -27,7 +27,6 @@ class GPS:
             log.warn("Invalid GGA sentence length. Position not updated.")
 
 
-    @deprecated
     def continuous_update_task(self):
         while True:
             self._receive_GGA_sentence()

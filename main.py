@@ -1,10 +1,8 @@
 import utime
 import network
-
 import config
 from component_api import gps_api, motor_api
 import _thread
-
 from libraries.tinylog import TinyLog
 import config as CONFIG
 from libraries import mps_utils, micropyserver
@@ -39,7 +37,9 @@ log.info("Starting http server")
 server = micropyserver.MicroPyServer(host='0.0.0.0', port=CONFIG.SERVER_PORT)
 
 def wp_root(request):
-    server.send("Hello world !")
+    landing_page_file_handle = open("landing_page.html", "rb")
+    server.send(landing_page_file_handle.read())
+    landing_page_file_handle.close()
 
 def wp_gps(request):
     server.send(gps.get_gps_data_json())

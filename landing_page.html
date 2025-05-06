@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Data Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .gps-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+        .gps-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .gps-status.locked {
+            color: green;
+        }
+        .gps-status.unlocked {
+            color: red;
+        }
+        .coordinates {
+            font-size: 24px;
+            margin: 15px 0;
+        }
+        .satellite-data {
+            margin-top: 15px;
+        }
+        .update-time {
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>GPS Data Monitor</h1>
+
+    <div class="controls">
+        <button id="startBtn">Start Monitoring</button>
+        <button id="stopBtn" disabled>Stop Monitoring</button>
+        <label for="interval">Update interval (ms): </label>
+        <input type="number" id="interval" min="1000" value="5000">
+    </div>
+
+    <div class="gps-container">
+        <div id="gpsStatus" class="gps-status unlocked">GPS Status: Waiting for data...</div>
+        <div id="coordinates" class="coordinates">Coordinates: --</div>
+        <div id="satelliteData" class="satellite-data">
+            <p>Number of Satellites: --</p>
+            <p>GPS Time: --</p>
+        </div>
+        <div id="updateTime" class="update-time">Last Updated: Never</div>
+    </div>
+
+    <script>
+        let monitoringInterval;
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const intervalInput = document.getElementById('interval');
+
+        startBtn.addEventListener('click', startMonitoring);
+        stopBtn.addEventListener('click', stopMonitoring);
+
+        // Fetch GPS data from the API
+        async function fetchGPSData() {
+            try {
+                const response = await fetch('/api/gps');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching GPS data:', error);
+                document.getElementById('gpsStatus').textContent = 'Error: Could not fetch GPS data';
+                document.getElementById('gpsStatus').className = 'gps-status unlocked';
+                return null;
+            }
+        }
+
+        // Update the UI with GPS data
+        function updateGPSDisplay(data) {
+            if (!data) return;
+
+            // Update GPS lock status
+            const gpsStatusElement = document.getElementById('gpsStatus');
+            if (data.gps_lock) {
+                gpsStatusElement.textContent = 'GPS Status: Locked';
+                gpsStatusElement.className = 'gps-status locked';
+            } else {
+                gpsStatusElement.textContent = 'GPS Status: No Lock';
+                gpsStatusElement.className = 'gps-status unlocked';
+            }
+
+            // Update coordinates
+            document.getElementById('coordinates').textContent =
+                `Coordinates: ${data.location.lat}, ${data.location.lon}`;
+
+            // Update satellite data
+            const satelliteDataElement = document.getElementById('satelliteData');
+            satelliteDataElement.innerHTML = `
+                <p>Number of Satellites: ${data.sat_data.num_sats || '--'}</p>
+                <p>GPS Time: ${data.sat_data.gps_time || '--'}</p>
+            `;
+
+            // Update the time of last update
+            const now = new Date();
+            document.getElementById('updateTime').textContent =
+                `Last Updated: ${now.toLocaleTimeString()}`;
+        }
+
+        // Start monitoring GPS data
+        function startMonitoring() {
+            const interval = parseInt(intervalInput.value) || 5000;
+
+            // Initial fetch
+            fetchGPSData().then(updateGPSDisplay);
+
+            // Set up regular interval
+            monitoringInterval = setInterval(() => {
+                fetchGPSData().then(updateGPSDisplay);
+            }, interval);
+
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            intervalInput.disabled = true;
+        }
+
+        // Stop monitoring GPS data
+        function stopMonitoring() {
+            clearInterval(monitoringInterval);
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            intervalInput.disabled = false;
+        }
+    </script>
+</body>
+</html>
