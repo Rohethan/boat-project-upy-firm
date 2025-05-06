@@ -6,6 +6,7 @@ import _thread
 from libraries.tinylog import TinyLog
 import config as CONFIG
 from libraries import mps_utils, micropyserver
+import esp32
 
 log = TinyLog(CONFIG.LOG_LEVEL)
 log.debug("Hello world ! Starting up !")
@@ -58,10 +59,14 @@ def wp_set_motors(request):
     propulsion_system.update_thrust_ratios(turn_ratio, power)
     server.send("ACK")
 
+def wp_temp(request):
+    server.send(str(esp32.mcu_temperature()))
 
 server.add_route("/", wp_root)
-server.add_route("api/gps", wp_gps)
+server.add_route("/api/temp", wp_temp)
+server.add_route("/api/gps", wp_gps)
 server.add_route("api/set_motors", wp_set_motors)
+
 
 
 
