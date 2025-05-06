@@ -37,9 +37,8 @@ log.info("Starting http server")
 server = micropyserver.MicroPyServer(host='0.0.0.0', port=CONFIG.SERVER_PORT)
 
 def wp_root(request):
-    landing_page_file_handle = open("landing_page.html", "rb")
-    server.send(landing_page_file_handle.read())
-    landing_page_file_handle.close()
+    landing_page_file = open("landing_page.html", "r").read()
+    server.send(landing_page_file)
 
 def wp_gps(request):
     server.send(gps.get_gps_data_json())
@@ -61,8 +60,8 @@ def wp_set_motors(request):
 
 
 server.add_route("/", wp_root)
-server.add_route("/api/gps", wp_gps)
-server.add_route("/api/set_motors", wp_set_motors)
+server.add_route("api/gps", wp_gps)
+server.add_route("api/set_motors", wp_set_motors)
 
 
 
