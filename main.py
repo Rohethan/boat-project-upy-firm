@@ -38,17 +38,16 @@ def wp_set_motors(request):
     params = mps_utils.get_request_query_params(request)
     try :
         l_power = float(params['left'])
-        l_power = max(min(l_power, 0), 1)
     except KeyError :
         l_power = 0.0
 
     try :
         r_power = float(params['right'])
-        r_power = max(min(r_power, 0), 1)
     except KeyError :
         r_power = 0.0
 
     motors.set_motors_power(l_power, r_power)
+    print("new motor power received", l_power, r_power)
     server.send("ACK")
 
 
