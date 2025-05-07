@@ -1,4 +1,3 @@
-from libraries.tinylog import TinyLog
 
 #----------------------------------------------
 # CONFIG FILE : THE CONTAINER OF ALL PARAMETERS
@@ -17,7 +16,7 @@ IN2_PIN = 38
 ENA_PIN = 45
 IN3_PIN = 46
 IN4_PIN = 47
-ENB_PIN = 48
+ENB_PIN = 40
 
 HALL_LEFT_PIN = 36
 HALL_RIGHT_PIN = 18
@@ -36,7 +35,7 @@ BATTERY_MAX_VOLTAGE = 12.6
 ADC_VOLT_PER_AMP = 0.1
 
 # --- LOG PARAMETERS ---
-LOG_LEVEL = TinyLog.DEBUG
+LOG_LEVEL = 0
 
 # --- WIFI PARAMETERS ---
 WIFI_SSID = "Team4-BP"
