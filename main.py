@@ -8,6 +8,8 @@ import config as CONFIG
 from libraries import mps_utils, micropyserver
 import esp32
 
+utime.sleep(3)
+
 log = TinyLog(CONFIG.LOG_LEVEL)
 log.debug("Hello world ! Starting up !")
 
@@ -64,14 +66,15 @@ def wp_temp(request):
 
 server.add_route("/", wp_root)
 server.add_route("/api/temp", wp_temp)
-server.add_route("/api/gps", wp_gps)
-server.add_route("api/set_motors", wp_set_motors)
+#server.add_route("/api/gps", wp_gps)
+server.add_route("/api/set_motors", wp_set_motors)
 
 
 
 
 _thread.start_new_thread(server.start, ())
 _thread.start_new_thread(propulsion_system.motor_task, ())
+#_thread.start_new_thread(gps.continuous_update_task, ())
 
 
 log.info("Starting main loop")

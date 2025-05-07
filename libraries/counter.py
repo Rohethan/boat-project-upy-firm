@@ -1,7 +1,7 @@
 import machine
 
 class Counter:
-    def increment(self, pin):  # Accept the IRQ argument.
+    def increment(self):  # Accept the IRQ argument.
         self.count += 1
 
     def __init__(self, pin, start=0):

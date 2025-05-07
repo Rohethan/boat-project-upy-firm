@@ -1,10 +1,10 @@
 from machine import Pin, PWM
 from libraries.counter import Counter
 import utime
-import math
-import micropython
 
 import config
+
+
 
 
 class PIDController:
@@ -130,6 +130,7 @@ class PropulsionSystem:
 
     def update_motors(self):
         rpm_l, rpm_r = self.calculate_rpms()
+        print("RPMs : ", rpm_l, rpm_r)
         target_rpm_l = config.MOTOR_MAX_RPM * self.thrust_ratio * self.thrust_power
         target_rpm_r = config.MOTOR_MAX_RPM * (1 - self.thrust_ratio) * self.thrust_power
 
@@ -138,13 +139,14 @@ class PropulsionSystem:
         ctrl_R = self.PIDctrl_R.compute(target_rpm_r, rpm_r, dt)
         self.last_motor_update = utime.ticks_ms()
 
-        self.ena.duty_u16(int(math.sqrt(ctrl_L)))
-        self.enb.duty_u16(int(math.sqrt(ctrl_R)))
+        self.ena.duty_u16(int(ctrl_L))
+        self.enb.duty_u16(int(ctrl_R))
 
 
     def motor_task(self):
         while True:
             self.update_motors()
-            utime.sleep_ms(200)
+            print("MOTORS TICK")
+            utime.sleep_ms(300)
 
 
