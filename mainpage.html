@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boat Motor Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f0f8ff;
+        }
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+        .motor-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .slider-container {
+            height: 300px;
+            display: flex;
+            align-items: center;
+        }
+        .slider {
+            -webkit-appearance: slider-vertical;
+            width: 60px;
+            height: 250px;
+            margin: 20px 0;
+        }
+        .value-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            width: 60px;
+        }
+        .label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        #status {
+            margin-top: 20px;
+            font-style: italic;
+            color: #555;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004c99;
+        }
+        .settings {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #e6f2ff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Boat Motor Control Panel</h1>
+    
+    <div class="settings">
+        <label for="address">Boat Address: </label>
+        <input type="text" id="address" value="localhost" placeholder="Enter boat IP address">
+    </div>
+    
+    <div class="control-panel">
+        <div class="motor-control">
+            <div class="label">LEFT MOTOR</div>
+            <div class="value-display" id="left-value">0</div>
+            <div class="slider-container">
+                <input type="range" min="0" max="100" value="0" class="slider" id="left-slider" orient="vertical">
+            </div>
+        </div>
+        
+        <div class="motor-control">
+            <div class="label">RIGHT MOTOR</div>
+            <div class="value-display" id="right-value">0</div>
+            <div class="slider-container">
+                <input type="range" min="0" max="100" value="0" class="slider" id="right-slider" orient="vertical">
+            </div>
+        </div>
+    </div>
+    
+    <button id="stop-btn">EMERGENCY STOP</button>
+    
+    <div id="status">Ready to control</div>
+    
+    <script>
+        // Show when sliders are being adjusted but not yet sent
+        function updateStatusAdjusting() {
+            statusDisplay.textContent = "Adjusting motors... Release slider to apply";
+            statusDisplay.style.color = "#555";
+        }
+        const leftSlider = document.getElementById('left-slider');
+        const rightSlider = document.getElementById('right-slider');
+        const leftValue = document.getElementById('left-value');
+        const rightValue = document.getElementById('right-value');
+        const stopBtn = document.getElementById('stop-btn');
+        const statusDisplay = document.getElementById('status');
+        const addressInput = document.getElementById('address');
+        
+        // Update value displays when sliders are being dragged
+        leftSlider.oninput = function() {
+            leftValue.textContent = this.value;
+            updateStatusAdjusting();
+        };
+        
+        rightSlider.oninput = function() {
+            rightValue.textContent = this.value;
+            updateStatusAdjusting();
+        };
+        
+        // Send commands only when sliders are released
+        leftSlider.onchange = function() {
+            sendMotorCommand();
+        };
+        
+        rightSlider.onchange = function() {
+            sendMotorCommand();
+        };
+        
+        // Emergency stop button
+        stopBtn.onclick = function() {
+            leftSlider.value = 0;
+            rightSlider.value = 0;
+            leftValue.textContent = "0";
+            rightValue.textContent = "0";
+            sendMotorCommand();
+        };
+        
+        // Function to send motor commands
+        function sendMotorCommand() {
+            const leftPower = leftSlider.value;
+            const rightPower = rightSlider.value;
+            const address = addressInput.value || 'localhost';
+            
+            const url = `http://${address}/set_motors?left=${leftPower}&right=${rightPower}`;
+            
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        statusDisplay.textContent = `Motors updated: Left=${leftPower}, Right=${rightPower}`;
+                        statusDisplay.style.color = "#008800";
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .catch(error => {
+                    statusDisplay.textContent = `Error: ${error.message}`;
+                    statusDisplay.style.color = "#cc0000";
+                });
+        }
+    </script>
+</body>
+</html>
