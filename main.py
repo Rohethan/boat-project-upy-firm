@@ -2,6 +2,7 @@ import utime
 import network
 
 import config
+import pulse_count_tester
 from component_api import motor_api
 import _thread
 import config as CONFIG
@@ -31,18 +32,19 @@ print("Starting http server")
 server = micropyserver.MicroPyServer(host='0.0.0.0', port=CONFIG.SERVER_PORT)
 
 def wp_root(request):
-    server.send("Hello world !")
+    web_page = open("mainpage.html", "r")
+    server.send(web_page.read())
 
 
 def wp_set_motors(request):
     params = mps_utils.get_request_query_params(request)
     try :
-        l_power = float(params['left'])
+        l_power = float(params['left'])/100
     except KeyError :
         l_power = 0.0
 
     try :
-        r_power = float(params['right'])
+        r_power = float(params['right'])/100
     except KeyError :
         r_power = 0.0
 
@@ -54,4 +56,5 @@ def wp_set_motors(request):
 server.add_route("/", wp_root)
 server.add_route("/set_motors", wp_set_motors)
 
+_thread.start_new_thread(pulse_count_tester.pulse_count_task, ())
 server.start()

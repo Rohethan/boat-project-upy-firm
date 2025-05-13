@@ -22,7 +22,7 @@ HALL_LEFT_PIN = 36
 HALL_RIGHT_PIN = 18
 
 # --- MOTOR AND TRANSMISSION PARAMETERS ---
-MOTOR_MAX_RPM = 2500 # Set this to the lowest of the two motors
+MOTOR_MAX_RPM = 4000 # Set this to the lowest of the two motors
 PID_P = 1
 PID_I = 0.25
 PID_D = 0.5
