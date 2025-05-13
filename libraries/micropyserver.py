@@ -95,7 +95,8 @@ class MicroPyServer(object):
         """ Find route """
         lines = request.split("\r\n")
         method = re.search("^([A-Z]+)", lines[0]).group(1)
-        path = re.search("^[A-Z]+\\s+(/[-a-zA-Z0-9_.]*)", lines[0]).group(1)
+        # Updated regex to support nested paths with forward slashes
+        path = re.search("^[A-Z]+\\s+(/[-a-zA-Z0-9_./]*)", lines[0]).group(1)
         for route in self._routes:
             if method != route["method"]:
                 continue

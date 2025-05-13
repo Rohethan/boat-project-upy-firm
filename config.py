@@ -6,36 +6,9 @@
 # ALL SHALL BE IN THIS CONFIG FILE.
 #----------------------------------------------
 
-# --- PIN DEFINITIONS ---
-LED_PIN = 2
-NEO6M_RX_PIN = 5
-NEO6M_TX_PIN = 4
-
-IN1_PIN = 37
-IN2_PIN = 38
-ENA_PIN = 45
-IN3_PIN = 46
-IN4_PIN = 47
-ENB_PIN = 40
-
-HALL_LEFT_PIN = 36
-HALL_RIGHT_PIN = 18
-
-# --- MOTOR AND TRANSMISSION PARAMETERS ---
-MOTOR_MAX_RPM = 4000 # Set this to the lowest of the two motors
-PID_P = 1
-PID_I = 0.25
-PID_D = 0.5
-
-# --- GPS PARAMETERS ---
-UART_ID_GPS = 1
-
-# --- ENERGY PARAMETERS ---
-BATTERY_MAX_VOLTAGE = 12.6
-ADC_VOLT_PER_AMP = 0.1
-
-# --- LOG PARAMETERS ---
-LOG_LEVEL = 0
+# --- MOTOR PIN DEFINITIONS ---
+ENA_PIN = 45  # Left motor enable pin
+ENB_PIN = 40  # Right motor enable pin
 
 # --- WIFI PARAMETERS ---
 WIFI_SSID = "Team4-BP"
@@ -44,3 +17,8 @@ WIFI_MAX_CLIENTS = 10
 
 # --- SERVER PARAMETERS ---
 SERVER_PORT = 80
+
+# --- MAGNETOMETER PARAMETERS ---
+MAG_I2C_ID = 0      # I2C bus ID for magnetometer
+MAG_SCL_PIN = 5     # SCL pin for magnetometer
+MAG_SDA_PIN = 4     # SDA pin for magnetometer
